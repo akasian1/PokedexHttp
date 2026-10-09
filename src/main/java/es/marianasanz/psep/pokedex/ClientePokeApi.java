@@ -49,8 +49,13 @@ public class ClientePokeApi {
         return clave;
     }
     public Pokemon consultarPokemon(String entrada) throws ExcepcionPokedex, InterruptedException {
+        String pokemon = normalizarEntrada(entrada);
+        if (cache.containsKey(pokemon)) {
+            System.out.println("Consulta encontrada en cache.");
+            return cache.get(entrada);
+        }
+
         try {
-            String pokemon = normalizarEntrada(entrada);
             String url = base.toString() + pokemon;
             System.out.println("URL a consultar : "+url);
 
@@ -70,7 +75,11 @@ public class ClientePokeApi {
             if (respuesta.statusCode() == 404) throw new ExcepcionPokedex("HTTP 404: no existe el Pokémon solicitado: " + pokemon);
             if (respuesta.statusCode() != 200) throw new ExcepcionPokedex("Error HTTP " + respuesta.statusCode() + ": no se procesa la ficha.");
 
-            return Pokemon.desdeJson(respuesta.body());
+            Pokemon pokemonObtenido = Pokemon.desdeJson(respuesta.body());
+            cache.put(pokemonObtenido.getNombre(),pokemonObtenido);
+            cache.put(Integer.toString(pokemonObtenido.getId()),pokemonObtenido);
+
+            return pokemonObtenido;
         } catch (HttpTimeoutException error) {
             throw new ExcepcionPokedex("Tiempo de espera agotado al consultar el Pokémon.", error);
         } catch (IOException error) {
@@ -97,6 +106,7 @@ public class ClientePokeApi {
         URI url = null;
         try {
             //TODO 1
+            url = URI.create(obtenerUrlImagen(pokemon));
             if (!("https".equalsIgnoreCase(url.getScheme()) || "http".equalsIgnoreCase(url.getScheme())) || url.getHost() == null)
                 throw new IllegalArgumentException("La imagen necesita una URL HTTP válida");
         } catch (IllegalArgumentException error) {

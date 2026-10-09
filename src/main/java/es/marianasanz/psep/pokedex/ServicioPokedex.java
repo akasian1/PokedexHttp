@@ -8,17 +8,17 @@ public class ServicioPokedex {
     public void mostrarFicha(Pokemon pokemon) {
         System.out.println("Identificador : "+pokemon.getId());
         System.out.println("Nombre : "+pokemon.getNombre());
-        System.out.println("Altura : "+pokemon.getAlturaMetros()/10 + "m");
-        System.out.println("Peso : "+pokemon.getPesoKilogramos()/10 + "kg");
+        System.out.println("Altura : "+pokemon.getAlturaMetros() + " m");
+        System.out.println("Peso : "+pokemon.getPesoKilogramos() + " kg");
         System.out.println("Tipos :");
         for (String tipo : pokemon.getTipos()) {
             System.out.print(tipo);
         }
         System.out.println("Puntos de salud : "+pokemon.getEstadistica("hp"));
         System.out.println("Ataque : "+pokemon.getEstadistica("attack"));
-        System.out.println("Defensa : "+pokemon.getEstadistica("defence"));
+        System.out.println("Defensa : "+pokemon.getEstadistica("defense"));
         System.out.println("Ataque especial : "+pokemon.getEstadistica("special-attack"));
-        System.out.println("Defensa especial : "+pokemon.getEstadistica("special-defence"));
+        System.out.println("Defensa especial : "+pokemon.getEstadistica("special-defense"));
         System.out.println("Velocidad : "+pokemon.getEstadistica("speed"));
     }
 
