@@ -52,7 +52,7 @@ public class ClientePokeApi {
         String pokemon = normalizarEntrada(entrada);
         if (cache.containsKey(pokemon)) {
             System.out.println("Consulta encontrada en cache.");
-            return cache.get(entrada);
+            return cache.get(pokemon);
         }
 
         try {
@@ -76,7 +76,7 @@ public class ClientePokeApi {
             if (respuesta.statusCode() != 200) throw new ExcepcionPokedex("Error HTTP " + respuesta.statusCode() + ": no se procesa la ficha.");
 
             Pokemon pokemonObtenido = Pokemon.desdeJson(respuesta.body());
-            cache.put(pokemonObtenido.getNombre(),pokemonObtenido);
+            cache.put(pokemonObtenido.getNombre().toLowerCase(),pokemonObtenido);
             cache.put(Integer.toString(pokemonObtenido.getId()),pokemonObtenido);
 
             return pokemonObtenido;
@@ -105,7 +105,6 @@ public class ClientePokeApi {
     public Path descargarImagen(Pokemon pokemon, Path destino) throws ExcepcionPokedex, InterruptedException {
         URI url = null;
         try {
-            //TODO 1
             url = URI.create(obtenerUrlImagen(pokemon));
             if (!("https".equalsIgnoreCase(url.getScheme()) || "http".equalsIgnoreCase(url.getScheme())) || url.getHost() == null)
                 throw new IllegalArgumentException("La imagen necesita una URL HTTP válida");
@@ -117,10 +116,18 @@ public class ClientePokeApi {
             Path carpeta = destino.toAbsolutePath().getParent();
             Files.createDirectories(carpeta);
             temporal = Files.createTempFile(carpeta, "imagen-", ".tmp");
-            HttpRequest peticion = null;//TODO 2
+            HttpRequest peticion = HttpRequest
+                    .newBuilder()
+                    .GET()
+                    .uri(URI.create(url.toString()))
+                    .header("Accept", "application/json")
+                    .timeout(Duration.ofSeconds(15))
+                    .build();
+            System.out.println("Solicitando imagen en "+url.toString());
             // ofFile escribe el cuerpo en disco, incluso si el servidor responde con un error.
-            HttpResponse<Path> respuesta = null;//TODO 3
-            //TODO 4
+            HttpResponse<Path> respuesta = cliente.send(peticion, HttpResponse.BodyHandlers.ofFile(temporal));
+            mostrarMetadatos(respuesta);
+
             if (respuesta.statusCode() != 200) throw new ExcepcionPokedex("Error HTTP " + respuesta.statusCode() + " al descargar la imagen.");
             String tipo = respuesta.headers().firstValue("Content-Type").orElse("")
                     .split(";", 2)[0].trim().toLowerCase(Locale.ROOT);

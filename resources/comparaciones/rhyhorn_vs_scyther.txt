@@ -1,0 +1,13 @@
+Comparación: rhyhorn (#111) y scyther (#123)
+Comparación de estadísticas base; no es una simulación de combate.
+
+Estadística        |      rhyhorn |      scyther | Ganador
+Puntos de salud    |           80 |           70 | rhyhorn
+Ataque             |           85 |          110 | scyther
+Defensa            |           95 |           80 | rhyhorn
+Ataque especial    |           30 |           55 | scyther
+Defensa especial   |           30 |           80 | scyther
+Velocidad          |           25 |          105 | scyther
+
+Puntuación: rhyhorn = 2; scyther = 4
+Resultado final: scyther

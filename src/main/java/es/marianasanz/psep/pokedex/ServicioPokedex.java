@@ -25,6 +25,7 @@ public class ServicioPokedex {
     // Ampliación 2: comparación de estadísticas, no simulación de combate.
     public ResultadoComparacion compararPokemon(Pokemon primero, Pokemon segundo) throws ExcepcionPokedex {
         //TODO
+        if (primero.getId() == segundo.getId()) throw new ExcepcionPokedex("Se trata del mismo pokemon");
         int puntosPrimero = 0, puntosSegundo = 0;
         int ancho = Math.max(12, Math.max(primero.getNombre().length(), segundo.getNombre().length()));
         String formato = "%-18s | %" + ancho + "s | %" + ancho + "s | %s%n";

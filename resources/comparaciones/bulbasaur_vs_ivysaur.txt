@@ -1,0 +1,13 @@
+Comparación: bulbasaur (#1) y ivysaur (#2)
+Comparación de estadísticas base; no es una simulación de combate.
+
+Estadística        |    bulbasaur |      ivysaur | Ganador
+Puntos de salud    |           45 |           60 | ivysaur
+Ataque             |           49 |           62 | ivysaur
+Defensa            |           49 |           63 | ivysaur
+Ataque especial    |           65 |           80 | ivysaur
+Defensa especial   |           65 |           80 | ivysaur
+Velocidad          |           45 |           60 | ivysaur
+
+Puntuación: bulbasaur = 0; ivysaur = 6
+Resultado final: ivysaur

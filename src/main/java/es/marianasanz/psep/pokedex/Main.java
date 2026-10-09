@@ -54,25 +54,28 @@ public class Main {
         if (!entrada.hasNextLine()) return null;
         String texto = entrada.nextLine();
         if (texto == null) return null;
-        return cliente.consultarPokemon(texto);
+        Pokemon pokemon = cliente.consultarPokemon(texto);
+        return pokemon;
     }
     private void guardarFicha(Pokemon pokemon) {
         // TODO
-    }
-    private void consultar() throws ExcepcionPokedex, InterruptedException {
-        //TODO
-        Pokemon pokemon = solicitarPokemon("Introduce nombre o el identificador : ");
-        servicio.mostrarFicha(pokemon);
         try {
             archivos.guardarFicha(pokemon);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+    private void consultar() throws ExcepcionPokedex, InterruptedException {
+        //TODO
+        Pokemon pokemon = solicitarPokemon("Introduce nombre o el identificador : ");
+        servicio.mostrarFicha(pokemon);
+        guardarFicha(pokemon);
+    }
     // Ampliación 2: imágenes.
     private void descargar() throws ExcepcionPokedex, InterruptedException {
         // TODO
-        Path destino = null; // TODO
+        Pokemon pokemon = solicitarPokemon("Introduce nombre o el identificador : ");
+        Path destino = archivos.rutaImagen(pokemon); // TODO
         if (Files.exists(destino)) {
             while (true) {
                 System.out.print("La imagen ya existe. ¿Conservar (c) o descargar de nuevo (d)? ");
@@ -88,11 +91,26 @@ public class Main {
             }
         }
         // TODO: Si no está la imagen, entonces hay que descargarla.
+        cliente.descargarImagen(pokemon,destino);
+
+
     }
     // Ampliación 3: comparación.
     private void comparar() throws ExcepcionPokedex, InterruptedException {
         //TODO
-        ResultadoComparacion resultado = null;
+        Pokemon pokemon1 = solicitarPokemon("Introduce nombre o el identificador del primer Pokemon : ");
+        if (pokemon1 == null) {
+            System.out.println("No se ha encontrado pokemon introducido");
+            return;
+        }
+        Pokemon pokemon2 = solicitarPokemon("Introduce nombre o el identificador del segundo Pokemon : ");
+        if (pokemon2 == null) {
+            System.out.println("No se ha encontrado pokemon introducido");
+            return;
+        }
+
+        ResultadoComparacion resultado = servicio.compararPokemon(pokemon1,pokemon2);
+        System.out.println(resultado.informe());
         //TODO
         try { System.out.println("Informe guardado en: " + archivos.guardarComparacion(resultado).toAbsolutePath()); }
         catch (IOException error) { System.out.println("No se pudo guardar el informe: " + error.getMessage()); }

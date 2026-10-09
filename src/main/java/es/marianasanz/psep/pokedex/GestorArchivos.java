@@ -24,7 +24,9 @@ public class GestorArchivos {
     // Ampliación 2: imágenes.
     public Path rutaImagen(Pokemon pokemon) {
         //TODO
-        return null;
+        if (pokemon == null) return null;
+        Path path = carpeta.resolve("imagenes").resolve(pokemon.getNombre().toLowerCase()+".png");
+        return path;
     }
     // Ampliación 3: comparación. Ya hecho
     public Path guardarComparacion(ResultadoComparacion resultado) throws IOException {
